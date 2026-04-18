@@ -1,0 +1,13 @@
+{
+  "name": "matrix-career",
+  "version": "1.0.0",
+  "description": "Minimal career orientation website for Gen Z",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx live-server ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}

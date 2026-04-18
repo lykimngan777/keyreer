@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trắc Nghiệm Định Hướng Nghề Nghiệp</title>
+  <meta name="description"
+    content="Khám phá định hướng nghề nghiệp phù hợp với bản thân qua 35 câu hỏi trắc nghiệm khoa học.">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary-yellow: #FFF200;
+      --primary-pink: #FF0080;
+      --primary-mint: #00FFB2;
+      --text-black: #000000;
+      --bg-white: #ffffff;
+      --border-width: 4px;
+      --font-main: 'Montserrat', sans-serif;
+      --card-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+      --card-shadow-hover: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+      --transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+      
+      /* Missing iOS variables mapped to Neo-Brutalism */
+      --accent: var(--text-black);
+      --accent-hover: var(--primary-pink);
+      --accent-light: #fffacd;
+      --bg: var(--bg-white);
+      --ink: var(--text-black);
+      --ink2: var(--text-black);
+      --ink3: var(--text-black);
+      --line: var(--text-black);
+      --success: var(--primary-mint);
+      --warn: var(--primary-yellow);
+      --danger: var(--primary-pink);
+      --ease: var(--transition);
+      --ease-spring: var(--transition);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --dur: 0.35s;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: var(--text-black);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    /* Layout */
+    .quiz-container {
+      max-width: 800px;
+      margin: 40px auto;
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .card {
+      background: var(--bg-white);
+      border: var(--border-width) solid var(--text-black);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      width: 100%;
+    }
+
+    /* Progress - Fixed at top */
+    .progress-shell {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: #e0e0e0;
+      border-bottom: var(--border-width) solid var(--text-black);
+      z-index: 9999;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-pink);
+      border-right: var(--border-width) solid var(--text-black);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* Question Styles */
+    .question-header {
+      margin-bottom: 32px;
+    }
+
+    .question-number {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-black);
+      margin-bottom: 12px;
+      display: inline-block;
+      background: var(--primary-yellow);
+      padding: 0.2rem 1rem;
+      border: 2px solid var(--text-black);
+      transform: rotate(-1deg);
+    }
+
+    .question-text {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text-black);
+      margin-top: 1rem;
+    }
+
+    /* Choices */
+    .choices-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      padding: 1.2rem 2rem;
+      background: var(--bg-white);
+      border: 3px solid var(--text-black);
+      border-radius: 12px;
+      text-align: left;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .choice-btn:hover {
+      background: var(--primary-mint);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .choice-btn.selected {
+      background: var(--primary-yellow);
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .choice-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--text-black);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    .quiz-footer {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: var(--border-width) solid var(--text-black);
+      text-transform: uppercase;
+    }
+
+    .btn-outline {
+      background: var(--bg-white);
+      color: var(--text-black);
+      box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--primary-mint);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .btn-outline:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Results */
+    #resultScreen {
+      display: none;
+    }
+
+    .result-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .result-header h2 {
+      font-family: var(--font-main);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--primary-pink);
+      -webkit-text-stroke: 1.5px var(--text-black);
+      margin-bottom: 20px;
+    }
+
+    .score-overview {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .score-card {
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: var(--primary-yellow);
+      text-align: center;
+      border: 3px solid var(--text-black);
+      box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .score-val {
+      font-size: 2rem;
+      font-weight: 900;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .score-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-black);
+      text-transform: uppercase;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .insight-box {
+      padding: 2rem;
+      border-radius: 12px;
+      background: var(--bg-white);
+      border: 3px solid var(--text-black);
+      box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .insight-box h4 {
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    .insight-box p {
+      font-size: 1rem;
+      color: var(--text-black);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .jobs-section {
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 4px dashed var(--text-black);
+    }
+
+    .jobs-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .job-chip {
+      padding: 10px 24px;
+      background: var(--primary-mint);
+      border: 2px solid var(--text-black);
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 800;
+      box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .section-label {
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-black);
+      background: var(--bg-white);
+      padding: 0.2rem 1rem;
+      border: 2px solid var(--text-black);
+      display: inline-block;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 56px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-solid {
+      background: var(--primary-yellow);
+      color: var(--text-black);
+      padding: 1rem 2.5rem;
+      box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .btn-solid:hover {
+      background: var(--primary-mint);
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      font-weight: 800;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Step dots */
+    .step-dots {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+
+    .step-dot {
+      height: 4px;
+      border-radius: 100px;
+      background: var(--line);
+      transition: all 0.4s var(--ease-spring);
+      flex: 1;
+    }
+
+    .step-dot.active {
+      background: var(--accent);
+    }
+
+    .step-dot.done {
+      background: var(--success);
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ─── HEADER CARD ─── */
+    .hdr {
+      padding: 40px 32px;
+      border-bottom: 2px solid var(--text-black);
+      text-align: center;
+    }
+
+    .hdr-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .hdr h1 {
+      font-family: var(--font-main);
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--primary-pink);
+      -webkit-text-stroke: 1.5px var(--text-black);
+      margin-bottom: 20px;
+    }
+
+    .hdr-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hdr-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink2);
+    }
+
+    .hdr-chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ─── QUESTION AREA ─── */
+    .q-area {
+      padding: 28px 32px;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* iOS-style slide transitions */
+    .q-content {
+      will-change: transform, opacity;
+    }
+
+    .q-content.slide-in-right {
+      animation: slideInRight var(--dur) var(--ease) both;
+    }
+
+    .q-content.slide-in-left {
+      animation: slideInLeft var(--dur) var(--ease) both;
+    }
+
+    .q-content.slide-out-left {
+      animation: slideOutLeft var(--dur) var(--ease) both;
+    }
+
+    .q-content.slide-out-right {
+      animation: slideOutRight var(--dur) var(--ease) both;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(40px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-40px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutLeft {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateX(-40px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateX(40px);
+        opacity: 0;
+      }
+    }
+
+    /* Page label */
+    .page-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink3);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 22px;
+    }
+
+    /* Question list */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Question item */
+    .q-item {
+      border: 3px solid var(--text-black);
+      border-radius: 0;
+      padding: 28px;
+      background: var(--bg-white);
+      box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+      transition: all 0.2s ease;
+    }
+
+    .q-item.answered {
+      border-color: var(--text-black);
+      background: #fafafa;
+      box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+      transform: translate(4px, 4px);
+    }
+
+    .q-item.error {
+      border-color: var(--danger);
+      background: rgba(255, 59, 48, 0.05);
+      animation: shake 0.4s var(--ease);
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-6px);
+      }
+
+      75% {
+        transform: translateX(6px);
+      }
+    }
+
+    .q-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .q-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      background: var(--primary-yellow);
+      border: 2px solid var(--text-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text-black);
+      margin-top: 1px;
+      transition: all 0.3s;
+    }
+
+    .q-item.answered .q-num {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .q-text {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-black);
+      line-height: 1.4;
+      font-family: var(--font-main);
+    }
+
+    /* Options Container */
+    .options-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    /* Option Label as a Column */
+    .opt-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      gap: 12px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Hide native radio */
+    .opt-label input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The Circular Button */
+    .opt-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: var(--border-width) solid var(--text-black);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+    }
+
+    .opt-label:hover .opt-circle {
+      background: var(--primary-yellow);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+    }
+
+    .opt-label:active .opt-circle {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
+    }
+
+    .opt-label:has(input:checked) .opt-circle {
+      background: var(--primary-mint);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+    }
+
+    /* The Letter inside the circle */
+    .opt-key {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-black);
+    }
+
+    /* The Label Text under the circle */
+    .opt-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-black);
+      text-align: center;
+      line-height: 1.3;
+      transition: all 0.2s;
+    }
+
+    .opt-label:has(input:checked) .opt-text {
+      color: var(--primary-pink);
+      font-weight: 800;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 32px;
+      background: transparent;
+      gap: 12px;
+    }
+
+    /* Buttons — Pill Style from Image */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 40px;
+      border-radius: 999px; /* Pill shape */
+      font-family: var(--font-main);
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      border: 3px solid var(--text-black);
+      background: var(--primary-yellow);
+      color: var(--text-black);
+      box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0px 0px rgba(0,0,0,1);
+      background: var(--primary-mint);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-ghost {
+      background: var(--bg-white);
+    }
+
+    .btn-primary {
+      background: var(--primary-yellow);
+    }
+
+    .btn-primary:not(:disabled):hover {
+      background: #00d998;
+    }
+
+    .btn-finish {
+      background: var(--primary-pink);
+      color: white;
+      border-color: var(--text-black);
+    }
+
+    .btn-finish:not(:disabled):hover {
+      background: #d6006c;
+    }
+
+    .page-info {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink3);
+      white-space: nowrap;
+    }
+
+    /* ─── RESULT ─── */
+    .result-screen {
+      display: none;
+    }
+
+    .result-hdr {
+      padding: 40px 32px 32px;
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .result-icon {
+      font-size: 3rem;
+      margin-bottom: 14px;
+      display: block;
+      animation: popIn 0.5s var(--ease-spring) both;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .result-screen h2 {
+      font-family: var(--font-main);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--text-black);
+      margin-bottom: 12px;
+    }
+
+    .result-screen p {
+      font-size: 1.1rem;
+      color: var(--ink2);
+    }
+
+    .res-body {
+      padding: 32px;
+    }
+
+    .res-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .res-card {
+      background: var(--bg-white);
+      border: 3px solid var(--text-black);
+      padding: 24px;
+      box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+    }
+
+    .res-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--text-black);
+      text-transform: uppercase;
+    }
+
+    .res-chart {
+      height: 12px;
+      background: #eee;
+      border: 2px solid var(--text-black);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .res-bar {
+      height: 100%;
+      background: var(--primary-pink);
+      width: 0;
+      transition: width 1s var(--ease);
+    }
+
+    .res-val {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink2);
+    }
+
+    .res-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Progress shell -->
+  <div class="progress-shell">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="quiz-container">
+    <!-- Test Intro/Question Card -->
+    <div class="card" id="quizCard">
+      <!-- Steps indication (Mini iOS pill) -->
+      <div class="step-dots" id="stepDots">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+
+      <div class="q-area">
+        <div id="qContent" class="q-content">
+          <!-- Question content injected by JS -->
+        </div>
+      </div>
+
+      <div class="footer">
+        <button class="btn btn-ghost" id="prevBtn" disabled>Quay lại</button>
+        <span class="page-info" id="pageInfo">Trang 1 / 5</span>
+        <button class="btn btn-primary" id="nextBtn">Tiếp theo</button>
+      </div>
+    </div>
+
+    <!-- Result Card -->
+    <div class="card result-screen" id="resultCard">
+      <div class="result-hdr">
+        <span class="result-icon">✨</span>
+        <h2 id="resultTitle">Phân tích bản thân</h2>
+        <p>Đây là bản đồ tư duy và xu hướng nghề nghiệp của bạn.</p>
+      </div>
+      <div class="res-body">
+        <div class="res-grid" id="resGrid">
+          <!-- Scores injected here -->
+        </div>
+        <div class="res-actions">
+          <button class="btn btn-primary" id="goStep3">Xem ma trận nghề nghiệp</button>
+          <button class="btn btn-ghost" onclick="location.reload()">Làm lại test</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // Page 1: Realistic (R) - Kỹ thuật
+      {
+          page: 1, title: "Kỹ Thuật & Thực Hành", icon: "🔧",
+          items: [
+              { id: "r1", text: "Tôi thích làm việc với các máy móc, thiết bị hoặc công cụ." },
+              { id: "r2", text: "Tôi thích sửa chữa các đồ dùng điện tử hoặc cơ khí trong nhà." },
+              { id: "r3", text: "Tôi thích các hoạt động ngoài trời, vận động tay chân." },
+              { id: "r4", text: "Tôi thích lắp ráp, xây dựng các mô hình hoặc vật dụng cụ thể." },
+              { id: "r5", text: "Tôi là người thực tế, thích làm hơn là ngồi suy ngẫm lý thuyết." },
+              { id: "r6", text: "Tôi thích làm việc với các vật liệu tự nhiên (gỗ, kim loại, cây cối)." }
+          ]
+      },
+      // Page 2: Investigative (I) - Phân tích
+      {
+          page: 2, title: "Phân Tích & Nghiên Cứu", icon: "🔬",
+          items: [
+              { id: "i1", text: "Tôi thích tìm hiểu nguyên lý hoạt động của mọi thứ." },
+              { id: "i2", text: "Tôi thích giải các bài toán đố hoặc các vấn đề hóc búa." },
+              { id: "i3", text: "Tôi thường dành thời gian nghiên cứu sâu về một chủ đề mình quan tâm." },
+              { id: "i4", text: "Tôi thích làm việc với các con số, dữ liệu hoặc các thí nghiệm." },
+              { id: "i5", text: "Tôi thích đọc các sách khoa học, tạp chí chuyên ngành." },
+              { id: "i6", text: "Tôi thường đặt câu hỏi 'Tại sao' trước khi chấp nhận một sự thật." }
+          ]
+      },
+      // Page 3: Artistic (A) - Sáng tạo
+      {
+          page: 3, title: "Sáng Tạo & Nghệ Thuật", icon: "🎨",
+          items: [
+              { id: "a1", text: "Tôi thích vẽ, viết lách, chơi nhạc hoặc các hoạt động nghệ thuật." },
+              { id: "a2", text: "Tôi thích sự tự do, không thích làm việc theo quy tắc quá gò bó." },
+              { id: "a3", text: "Tôi thường có những ý tưởng mới lạ và độc đáo." },
+              { id: "a4", text: "Tôi thích trang trí phòng ốc hoặc thiết kế hình ảnh." },
+              { id: "a5", text: "Tôi nhạy cảm với cái đẹp và các tầng cảm xúc khác nhau." },
+              { id: "a6", text: "Tôi thích bộc lộ cá tính riêng của mình qua các tác phẩm sáng tạo." }
+          ]
+      },
+      // Page 4: Social (S) - Hỗ trợ
+      {
+          page: 4, title: "Hỗ Trợ & Cộng Đồng", icon: "🤝",
+          items: [
+              { id: "s1", text: "Tôi thích giúp đỡ người khác giải quyết vấn đề của họ." },
+              { id: "s2", text: "Tôi lắng nghe tốt và dễ dàng thấu hiểu cảm xúc người khác." },
+              { id: "s3", text: "Tôi thích công việc giảng dạy, đào tạo hoặc tư vấn." },
+              { id: "s4", text: "Tôi thích tham gia các hoạt động tình nguyện, thiện nguyện." },
+              { id: "s5", text: "Mọi người thường tìm đến tôi để xin lời khuyên." },
+              { id: "s6", text: "Tôi cảm thấy hạnh phúc khi thấy người khác tiến bộ nhờ mình." }
+          ]
+      },
+      // Page 5: Enterprising (E) - Lãnh đạo
+      {
+          page: 5, title: "Lãnh Đạo & Kinh Doanh", icon: "🚀",
+          items: [
+              { id: "e1", text: "Tôi thích dẫn dắt đội nhóm thực hiện một mục tiêu chung." },
+              { id: "e2", text: "Tôi tự tin khi thuyết trình hoặc thuyết phục người khác." },
+              { id: "e3", text: "Tôi thích kinh doanh, khởi nghiệp hoặc các hoạt động cạnh tranh." },
+              { id: "e4", text: "Tôi dám chấp nhận rủi ro để đạt được thành quả lớn." },
+              { id: "e5", text: "Tôi quan tâm đến quyền lực, địa vị và tầm ảnh hưởng." },
+              { id: "e6", text: "Tôi thích lập kế hoạch và điều phối nguồn lực." }
+          ]
+      },
+      // Page 6: Conventional (C) - Tổ chức
+      {
+          page: 6, title: "Tổ Chức & Hành Chính", icon: "📋",
+          items: [
+              { id: "c1", text: "Tôi thích làm việc với các con số một cách chính xác." },
+              { id: "c2", text: "Tôi thích sắp xếp tài liệu, hồ sơ một cách khoa học." },
+              { id: "c3", text: "Tôi thích làm việc theo quy trình và hướng dẫn rõ ràng." },
+              { id: "c4", text: "Tôi là người cẩn thận, chi tiết và coi trọng sự ổn định." },
+              { id: "c5", text: "Tôi cảm thấy thoải mái với các công việc văn phòng, hành chính." },
+              { id: "c6", text: "Tôi thích mọi thứ phải được hoàn thành đúng thời hạn và chuẩn mực." }
+          ]
+      }
+    ];
+
+    const groupInfo = {
+        r: { name: "Kỹ Thuật & Thực Hành", icon: "🔧", key: "technical", strengths: ["Khả năng thao tác tay chân", "Sửa chữa kỹ thuật", "Lắp ráp máy móc"], desc: "Bạn mạnh nhất ở các công việc đòi hỏi sự trực quan, thực tế và kỹ năng vận hành công cụ." },
+        i: { name: "Phân Tích & Nghiên Cứu", icon: "🔬", key: "analyst", strengths: ["Tư duy logic", "Giải quyết vấn đề phức tạp", "Nghiên cứu sâu"], desc: "Bạn có xu hướng tò mò, thích khám phá các lý thuyết khoa học và giải quyết các bài toán hóc búa." },
+        a: { name: "Sáng Tạo & Nghệ Thuật", icon: "🎨", key: "creative", strengths: ["Tư duy thẩm mỹ", "Ý tưởng độc đáo", "Biểu đạt nghệ thuật"], desc: "Tâm hồn nghệ sĩ và sự tự do trong suy nghĩ là lợi thế lớn nhất giúp bạn tạo ra những điều mới mẻ." },
+        s: { name: "Hỗ Trợ & Cộng Đồng", icon: "🤝", key: "social", strengths: ["Thấu cảm người khác", "Giao tiếp tinh tế", "Đào tạo & hướng dẫn"], desc: "Bạn là người của cộng đồng, luôn sẵn lòng lắng nghe, chia sẻ và giúp đỡ mọi người xung quanh." },
+        e: { name: "Lãnh Đạo & Kinh Doanh", icon: "🚀", key: "leader", strengths: ["Ra quyết định", "Thuyết phục & gây ảnh hưởng", "Quản lý mục tiêu"], desc: "Tố chất thủ lĩnh và tư duy kinh doanh giúp bạn tự tin dẫn dắt đội ngũ chinh phục những thử thách lớn." },
+        c: { name: "Tổ Chức & Hành Chính", icon: "📋", key: "order", strengths: ["Quản lý chi tiết", "Sắp xếp khoa học", "Tuân thủ quy trình"], desc: "Sự tỉ mỉ, chính xác và khả năng tổ chức công việc ngăn nắp là điểm tựa vững chắc cho sự nghiệp của bạn." }
+    };
+
+    let currentPage = 1;
+    let answers = {}; // Store answers as { id: score }
+
+    const qContent = document.getElementById('qContent');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const pageInfo = document.getElementById('pageInfo');
+    const progressFill = document.getElementById('progressFill');
+    const stepDots = document.getElementById('stepDots');
+    const resultCard = document.getElementById('resultCard');
+    const quizCard = document.getElementById('quizCard');
+
+    function renderPage(direction = 'next') {
+        const pageData = questions[currentPage - 1];
+        const animClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+
+        let html = `
+            <div class="${animClass}">
+                <div class="page-label">${pageData.icon} ${pageData.title}</div>
+                <div class="questions-list">
+        `;
+
+        pageData.items.forEach((item, index) => {
+            const currentScore = answers[item.id] || null;
+            html += `
+                <div class="q-item ${currentScore ? 'answered' : ''}" id="group-${item.id}">
+                    <div class="q-header">
+                        <div class="q-num">${index + 1}</div>
+                        <div class="q-text">${item.text}</div>
+                    </div>
+                    <div class="options-row">
+                        ${[1, 2, 3, 4, 5].map(score => `
+                            <label class="opt-label">
+                                <input type="radio" name="${item.id}" value="${score}" 
+                                    ${currentScore == score ? 'checked' : ''} 
+                                    onchange="selectScore('${item.id}', ${score})">
+                                <div class="opt-circle">
+                                    <span class="opt-key">${score}</span>
+                                </div>
+                                <span class="opt-text">${getScoreLabel(score)}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div></div>`;
+        qContent.innerHTML = html;
+
+        // Update UI state
+        pageInfo.textContent = `Trang ${currentPage} / ${questions.length}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.textContent = currentPage === questions.length ? 'Xem kết quả' : 'Tiếp theo';
+        
+        const progress = (currentPage / questions.length) * 100;
+        progressFill.style.width = `${progress}%`;
+
+        // Update dots
+        updateDots();
+    }
+
+    function getScoreLabel(score) {
+        return ['Rất sai', 'Sai', 'Trung lập', 'Đúng', 'Rất đúng'][score - 1];
+    }
+
+    function updateDots() {
+        stepDots.innerHTML = questions.map((_, i) => `
+            <div class="step-dot ${i + 1 === currentPage ? 'active' : (i + 1 < currentPage ? 'done' : '')}"></div>
+        `).join('');
+    }
+
+    window.selectScore = function(id, score) {
+        answers[id] = score;
+        const group = document.getElementById(`group-${id}`);
+        if (group) group.classList.add('answered');
+        
+        // Auto-scroll logic if all answered on page? Maybe later.
+    }
+
+    nextBtn.addEventListener('click', () => {
+        // Validate current page
+        const pageData = questions[currentPage - 1];
+        const unanswered = pageData.items.filter(item => !answers[item.id]);
+
+        if (unanswered.length > 0) {
+            unanswered.forEach(item => {
+                document.getElementById(`group-${item.id}`).classList.add('error');
+                setTimeout(() => {
+                    document.getElementById(`group-${item.id}`).classList.remove('error');
+                }, 1000);
+            });
+            alert("Vui lòng trả lời đủ các câu hỏi trong trang này.");
+            return;
+        }
+
+        if (currentPage < questions.length) {
+            currentPage++;
+            renderPage('next');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            calculateResults();
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderPage('prev');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    function calculateResults() {
+        const results = { r: 0, i: 0, a: 0, s: 0, e: 0, c: 0 };
+        
+        // Calculate raw sums
+        Object.keys(answers).forEach(id => {
+            const letter = id[0];
+            results[letter] += answers[id];
+        });
+
+        // Convert to percentage (max 30 per category)
+        const percentages = {};
+        Object.keys(results).forEach(letter => {
+            percentages[groupInfo[letter].key] = Math.round((results[letter] / 30) * 100);
+        });
+
+        // Sort categories by score
+        const sortedKeys = Object.keys(results).sort((a,b) => results[b] - results[a]);
+        const topGroupLetter = sortedKeys[0];
+        const secondGroupLetter = sortedKeys[1];
+
+        const finalData = {
+            scores: percentages,
+            sorted: sortedKeys.map(l => groupInfo[l].key),
+            topGroup: groupInfo[topGroupLetter].key,
+            secondGroup: groupInfo[secondGroupLetter].key,
+            profile: JSON.parse(localStorage.getItem('keyreer_profile') || '{}'),
+            groupDetails: {
+                [groupInfo[topGroupLetter].key]: { 
+                    ...groupInfo[topGroupLetter],
+                    pct: percentages[groupInfo[topGroupLetter].key] 
+                },
+                [groupInfo[secondGroupLetter].key]: { 
+                    ...groupInfo[secondGroupLetter],
+                    pct: percentages[groupInfo[secondGroupLetter].key] 
+                }
+            }
+        };
+
+        localStorage.setItem('keyreer_result', JSON.stringify(finalData));
+        showResultScreen(finalData);
+    }
+
+    function showResultScreen(data) {
+        quizCard.style.display = 'none';
+        resultCard.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        const resGrid = document.getElementById('resGrid');
+        resGrid.innerHTML = Object.entries(data.scores).map(([key, val]) => {
+            const info = Object.values(groupInfo).find(g => g.key === key);
+            return `
+                <div class="res-card">
+                    <h3>${info.icon} ${info.name}</h3>
+                    <div class="res-chart">
+                        <div class="res-bar" style="width: ${val}%"></div>
+                    </div>
+                    <div class="res-val">${val}% Phù hợp</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    document.getElementById('goStep3').addEventListener('click', () => {
+        window.location.href = '../Step 3/index.html';
+    });
+
+    // Start UI
+    renderPage();
+  </script>
+</body>
+
+</html>

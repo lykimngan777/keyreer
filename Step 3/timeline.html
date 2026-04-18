@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lộ trình thăng tiến | Matrix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Step 3/style.css">
+    <style>
+        body {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .timeline-view {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--text-black);
+            -webkit-text-stroke: 1.5px var(--text-black);
+            background: var(--bg-white);
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            border: var(--border-width) solid var(--text-black);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+            transform: rotate(-1deg);
+        }
+
+        .timeline-header p {
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+            max-width: 700px;
+            margin: 2rem auto 0;
+            background: var(--primary-yellow);
+            padding: 1rem;
+            border: 3px solid var(--text-black);
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+        }
+
+        .back-btn-box {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+        }
+
+        .back-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-white);
+            color: var(--text-black);
+            border: 3px solid var(--text-black);
+            font-weight: 800;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-mint);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+        }
+
+        /* Timeline Interactive Component */
+        .progress-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem 0 4rem;
+            position: relative;
+            background: var(--bg-white);
+            padding: 2rem;
+            border: var(--border-width) solid var(--text-black);
+            box-shadow: 10px 10px 0px 0px rgba(0,0,0,1);
+            border-radius: 20px;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 4rem;
+            right: 4rem;
+            height: 6px;
+            background: #e0e0e0;
+            border: 2px solid var(--text-black);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .progress-line-fill {
+            position: absolute;
+            top: 50%;
+            left: 4rem;
+            height: 6px;
+            background: var(--primary-pink);
+            border: 2px solid var(--text-black);
+            z-index: 1;
+            transition: width 0.4s ease;
+            width: 0%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 150px;
+        }
+
+        .step-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-white);
+            border: var(--border-width) solid var(--text-black);
+            transition: var(--transition);
+            margin-bottom: 1rem;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+        }
+
+        .timeline-step.completed .step-marker {
+            background: var(--primary-mint);
+        }
+
+        .timeline-step.active .step-marker {
+            background: var(--primary-yellow);
+            transform: scale(1.2);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+        }
+
+        .step-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-black);
+            text-align: center;
+            text-transform: uppercase;
+            background: var(--bg-white);
+            padding: 0.3rem 0.8rem;
+            border: 2px solid var(--text-black);
+            box-shadow: 3px 3px 0px 0px rgba(0,0,0,1);
+        }
+
+        /* Details Pane */
+        .stage-details {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--bg-white);
+            border: var(--border-width) solid var(--text-black);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 1);
+            margin-bottom: 4rem;
+        }
+
+        .details-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 4px dashed var(--text-black);
+        }
+
+        .details-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--text-black);
+            margin-bottom: 0.5rem;
+        }
+
+        .details-subtitle {
+            background: var(--primary-pink);
+            color: white;
+            padding: 0.3rem 1.2rem;
+            border: 2px solid var(--text-black);
+            display: inline-block;
+            font-weight: 800;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-black);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--primary-yellow);
+            border: 2px solid var(--text-black);
+            display: inline-block;
+        }
+
+        .detail-text {
+            color: var(--text-black);
+            line-height: 1.7;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .detail-list li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-black);
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .detail-list li::before {
+            content: "➜";
+            position: absolute;
+            left: 0;
+            color: var(--primary-pink);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-header h1 { font-size: 2rem; }
+            .details-grid { grid-template-columns: 1fr; gap: 2rem; }
+            
+            .progress-timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2rem;
+                padding-left: 2rem;
+            }
+
+            .progress-line {
+                width: 6px;
+                height: 80%;
+                left: 3.2rem;
+                top: 2rem;
+                transform: none;
+            }
+
+            .progress-line-fill {
+                width: 6px;
+                height: 0%;
+                left: 3.2rem;
+                top: 2rem;
+                transform: none;
+                transition: height 0.4s ease;
+            }
+
+            .timeline-step {
+                flex-direction: row;
+                gap: 2rem;
+                width: auto;
+            }
+
+            .step-marker { margin-bottom: 0; }
+            .step-title { font-size: 0.8rem; }
+            
+            .back-btn-box {
+                position: static;
+                margin-bottom: 2rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="timeline-view">
+        <div class="back-btn-box">
+            <a href="./" class="back-btn">
+                <span>&larr;</span> Quay lại ma trận
+            </a>
+        </div>
+
+        <div class="explorer-nav" style="margin-top: 1rem; margin-bottom: 4rem;">
+            <div class="nav-tab" onclick="location.href='./'">Mở lối sự nghiệp</div>
+            <div class="nav-tab active">Chi tiết nghề nghiệp</div>
+            <div class="nav-tab" id="nav-roadmap">Lộ trình thực hiện</div>
+        </div>
+
+        <div class="timeline-header">
+            <h1 id="career-title">Lộ trình thăng tiến</h1>
+            <p>Khám phá các cấp bậc, yêu cầu và kỹ năng cần thiết để chinh phục mục tiêu nghề nghiệp của bạn.</p>
+        </div>
+
+        <!-- Interactive Timeline -->
+        <div class="progress-timeline" id="progress-timeline">
+            <div class="progress-line"></div>
+            <div class="progress-line-fill" id="progress-fill"></div>
+        </div>
+
+        <!-- Dynamic Details Pane -->
+        <div class="stage-details" id="stage-details">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const careerName = urlParams.get('career') || 'Nghề nghiệp chưa xác định';
+
+            document.getElementById('career-title').textContent = careerName;
+            document.title = `Chi tiết - ${careerName} | Matrix`;
+            const roadmapUrl = `roadmap.html?career=${encodeURIComponent(careerName)}`;
+            document.getElementById('nav-roadmap').onclick = () => location.href = roadmapUrl;
+
+            const timelineData = [
+                {
+                    id: 'fresher',
+                    title: "Thực tập sinh / Fresher",
+                    shortDesc: "0 - 1 Năm kinh nghiệm",
+                    jd: "Hỗ trợ nhóm chuyên môn trong các dự án thực tế. Thực hiện các nhiệm vụ nghiên cứu, thu thập dữ liệu và báo cáo theo hướng dẫn của quản lý trực tiếp.",
+                    requirements: ["Tốt nghiệp hoặc sinh viên năm cuối.", "Tư duy logic tốt, học hỏi nhanh.", "Chủ động, có trách nhiệm."],
+                    skills: ["Giao tiếp cơ bản", "Công cụ văn phòng", "Làm việc nhóm"],
+                    dailyTasks: ["Xử lý dữ liệu cơ bản", "Chuẩn bị tài liệu dự án", "Ghi chép biên bản họp"]
+                },
+                {
+                    id: 'junior',
+                    title: "Chuyên viên (Junior)",
+                    shortDesc: "1 - 3 Năm kinh nghiệm",
+                    jd: "Đảm nhận và tự hoàn thành các hạng mục công việc độc lập. Tham gia đóng góp ý tưởng trong quá trình phát triển dự án.",
+                    requirements: ["Kinh nghiệm 1-3 năm.", "Khả năng làm việc độc lập.", "Quản lý thời gian tốt."],
+                    skills: ["Giải quyết vấn đề", "Kiến thức chuyên môn vững", "Lập báo cáo và phân tích"],
+                    dailyTasks: ["Thực hiện module độc lập", "Báo cáo tiến độ hàng ngày", "Đề xuất cải tiến quy trình"]
+                },
+                {
+                    id: 'senior',
+                    title: "Chuyên viên Cao cấp (Senior)",
+                    shortDesc: "3 - 5 Năm kinh nghiệm",
+                    jd: "Chủ trì thiết kế và giải quyết các bài toán phức tạp. Hướng dẫn (mentor) cho các bạn Fresher/Junior trong team.",
+                    requirements: ["Kinh nghiệm 3-5 năm.", "Thiết kế hệ thống/quy trình.", "Tư duy chiến lược."],
+                    skills: ["Chuyên môn sâu rộng", "Kỹ năng Mentoring", "Tối ưu hóa quy trình"],
+                    dailyTasks: ["Thiết kế giải pháp tổng thể", "Review chất lượng công việc", "Họp bàn chiến lược liên phòng ban"]
+                },
+                {
+                    id: 'manager',
+                    title: "Quản lý / Trưởng nhóm (Manager)",
+                    shortDesc: "Trên 5 Năm kinh nghiệm",
+                    jd: "Xây dựng chiến lược, quản lý ngân sách và nhân sự. Chịu trách nhiệm trực tiếp về hiệu quả kinh doanh.",
+                    requirements: ["Kinh nghiệm quản lý >2 năm.", "Tầm nhìn chiến lược.", "Khả năng ra quyết định."],
+                    skills: ["Lãnh đạo (Leadership)", "Quản lý rủi ro", "Đàm phán và thuyết phục"],
+                    dailyTasks: ["Lập kế hoạch & phân bổ nguồn lực", "Đánh giá hiệu suất nhân sự", "Giải quyết rủi ro cấp bách"]
+                }
+            ];
+
+            const timelineContainer = document.getElementById('progress-timeline');
+            const progressFill = document.getElementById('progress-fill');
+            const detailsContainer = document.getElementById('stage-details');
+
+            timelineData.forEach((item, index) => {
+                const step = document.createElement('div');
+                step.className = 'timeline-step';
+                step.dataset.index = index;
+                step.innerHTML = `
+                    <div class="step-marker"></div>
+                    <div class="step-title">${item.title}</div>
+                `;
+                timelineContainer.appendChild(step);
+                step.addEventListener('click', () => selectStage(index));
+            });
+
+            function selectStage(activeIndex) {
+                const steps = document.querySelectorAll('.timeline-step');
+                steps.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index < activeIndex) step.classList.add('completed');
+                    else if (index === activeIndex) step.classList.add('active');
+                });
+
+                const isMobile = window.innerWidth <= 768;
+                const percentage = (activeIndex / (timelineData.length - 1)) * 100;
+                
+                if (isMobile) {
+                    progressFill.style.height = `${percentage}%`;
+                    progressFill.style.width = '6px';
+                } else {
+                    progressFill.style.width = `${percentage}%`;
+                    progressFill.style.height = '6px';
+                }
+
+                renderDetails(timelineData[activeIndex], roadmapUrl);
+            }
+
+            function renderDetails(data, roadmapUrl) {
+                detailsContainer.style.opacity = 0;
+                setTimeout(() => {
+                    detailsContainer.innerHTML = `
+                        <div class="details-header">
+                            <h2 class="details-title">${data.title}</h2>
+                            <div class="details-subtitle">${data.shortDesc}</div>
+                        </div>
+
+                        <div class="details-grid">
+                            <div class="detail-column">
+                                <div class="detail-section">
+                                    <h3 class="section-title">Mô tả công việc (JD)</h3>
+                                    <p class="detail-text">${data.jd}</p>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h3 class="section-title">Yêu cầu nghề nghiệp</h3>
+                                    <ul class="detail-list">
+                                        ${data.requirements.map(req => `<li>${req}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="detail-column">
+                                <div class="detail-section">
+                                    <h3 class="section-title">Kỹ năng cần có</h3>
+                                    <ul class="detail-list">
+                                        ${data.skills.map(skill => `<li>${skill}</li>`).join('')}
+                                    </ul>
+                                </div>
+
+                                <div class="detail-section">
+                                    <h3 class="section-title">Nhiệm vụ hàng ngày</h3>
+                                    <ul class="detail-list">
+                                        ${data.dailyTasks.map(task => `<li>${task}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; margin-top: 2rem;">
+                             <a href="${roadmapUrl}" class="btn btn-black">
+                                Xem lộ trình thực hiện
+                            </a>
+                        </div>
+                    `;
+                    detailsContainer.style.opacity = 1;
+                }, 150);
+            }
+
+            selectStage(0);
+            window.addEventListener('resize', () => {
+                const activeStep = document.querySelector('.timeline-step.active');
+                if (activeStep) selectStage(parseInt(activeStep.dataset.index));
+            });
+        });
+    </script>
+</body>
+
+</html>
